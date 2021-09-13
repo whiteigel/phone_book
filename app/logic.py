@@ -78,7 +78,7 @@ def removing_empty_strings(list_of_contacts):
     return contacts_list_cleared
 
 
-def write_csv(contact_file):
+def write_csv(list_of_contacts):
     with open("phonebook.csv", "w") as f:
         datawriter = csv.writer(f, delimiter=',')
-        datawriter.writerows(contact_file)
+        datawriter.writerows(list_of_contacts)

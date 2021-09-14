@@ -1,10 +1,10 @@
 import csv
 import re
 
-phone_pattern_raw = r'(\+7|8)(\s*)(\(*)(\d{3})(\)*)(\s*)' \
+PHONE_PATTERN_RAW = r'(\+7|8)(\s*)(\(*)(\d{3})(\)*)(\s*)' \
                      r'(\-*)(\d{3})(\s*)(\-*)(\d{2})(\s*)(\-*)' \
                      r'(\d{2})(\s*)(\(*)(доб)*(\.*)(\s*)(\d+)*(\)*)'
-phone_pattern_pretty = r'+7(\4)\8-\11-\14\15\17\18\20'
+PHONE_PATTERN_PRETTY = r'+7(\4)\8-\11-\14\15\17\18\20'
 
 
 def read_csv(file):
@@ -42,7 +42,7 @@ def phone_num_converter(list_of_contacts):
     contacts_list_updated = []
     for card in list_of_contacts:
         card_as_string = ','.join(card)
-        card_new_phone = re.sub(phone_pattern_raw, phone_pattern_pretty, card_as_string)
+        card_new_phone = re.sub(PHONE_PATTERN_RAW, PHONE_PATTERN_PRETTY, card_as_string)
         card_as_list = card_new_phone.split(',')
         contacts_list_updated.append(card_as_list)
     del contacts_list_updated[0]

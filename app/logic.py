@@ -1,11 +1,27 @@
 import csv
 import re
+import datetime
 
 PHONE_PATTERN_RAW = r'(\+7|8)(\s*)(\(*)(\d{3})(\)*)(\s*)' \
                      r'(\-*)(\d{3})(\s*)(\-*)(\d{2})(\s*)(\-*)' \
                      r'(\d{2})(\s*)(\(*)(доб)*(\.*)(\s*)(\d+)*(\)*)'
 PHONE_PATTERN_PRETTY = r'+7(\4)\8-\11-\14\15\17\18\20'
+LOG_PATH = 'log.txt'
 
+def path_to_logger(path):
+    def logger(old_function):
+        def new_function(*args, **kwargs):
+            with open (path, 'a') as log:
+                time = datetime.datetime.now()
+                function_name = old_function.__name__
+                arguments = f'{args}, {kwargs}'
+                result = old_function(*args, **kwargs)
+                log_item = f'At {str(time)} called function {function_name} with arguments {arguments} resulted in {str(result)} +\n'
+                log.write(log_item)
+            result = old_function(*args, **kwargs)
+            return result
+        return new_function
+    return logger
 
 def read_csv(file):
     with open(file) as f:
@@ -77,7 +93,7 @@ def removing_empty_strings(list_of_contacts):
         contacts_list_cleared.append(card)
     return contacts_list_cleared
 
-
+@path_to_logger(LOG_PATH)
 def write_csv(list_of_contacts):
     with open("phonebook.csv", "w") as f:
         datawriter = csv.writer(f, delimiter=',')
